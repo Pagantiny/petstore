@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestore Prodotti</title>
+</head>
+<body>
+    <h1>Gestore Prodotti</h1>
+    <form method="POST">
+        <h2>Aggiungi Prodotto</h2>
+        Nome: <input type="text" name="nome" required>
+        Marca: <input type="text" name="marca" required>
+        Prezzo: <input type="text" name="prezzo" required>
+        Categoria: <input type="text" name="categoria" required>
+        URL: <input type="text" name="url">
+        Pezzi: <input type="number" name="pezzi" required>
+        <button type="submit" name="aggiungi">Aggiungi</button>
+    </form>
+
+    <form method="POST">
+        <h2>Elimina Prodotto</h2>
+        ID Prodotto: <input type="number" name="id_prodotto" required>
+        <button type="submit" name="elimina">Elimina</button>
+    </form>
+
+    <form method="POST">
+        <h2>Modifica Pezzi Prodotto</h2>
+        ID Prodotto: <input type="number" name="id_prodotto" required>
+        Nuovi Pezzi: <input type="number" name="pezzi" required>
+        <button type="submit" name="modifica">Modifica</button>
+    </form>
+
+    <h2>Categorie</h2>
+    <form method="GET" action="/prodotti">
+        <select name="categoria" onchange="this.form.submit()">
+            <option value="">Seleziona Categoria</option>
+            {% for categoria in categorie %}
+                <option value="{{ categoria[0] }}">{{ categoria[0] }}</option>
+            {% endfor %}
+        </select>
+    </form>
+ <form action="/export_csv" method="POST">
+        <button type="submit">Esporta prodotti in CSV</button>
+    </form>
+<h1>Statistiche di vendita</h1>
+    <img src="{{ url_for('plot_png') }}" alt="Grafico combinato a Barre e Torta">
+</body>
+</html>

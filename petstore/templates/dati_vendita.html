@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Dati di vendita</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Pezzi in magazzino</th>
+                <th scope="col">Pezzi venduti</th>
+            </tr>
+        </thead>
+        <tbody>
+           {% for pr in lista %}
+            {% if pr[1]== prodottoMax %}
+        <tr style="background-color: greenyellow;">
+
+            {% elif pr[1]== prodottoMin %}
+        <tr style="background-color: palevioletred;">
+            {% else %}
+        <tr>
+      {% endif %}
+
+                    <th scope="row">{{ pr[0] }}</th>
+                    <td>{{ pr[1] }}</td>
+                    <td>{{ pr[2] }}</td>
+                    <td>{{ pr[3] }}</td>
+                    <td>{{ pr[4] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

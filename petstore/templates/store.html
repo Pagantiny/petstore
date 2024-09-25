@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        select, button {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .card h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        .card p {
+            color: #666;
+        }
+        .card input[type="checkbox"] {
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: white;
+            padding: 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        ul li img {
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+        .cart-button {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .cart-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Store</h1>
+
+    <div class="container">
+
+        <!-- Form per scegliere la visualizzazione -->
+        <form method="get" action="{{ url_for('store') }}">
+            <label for="view">Scegli la visualizzazione:</label>
+            <select name="view" id="view">
+                <option value="card" {% if view_mode == 'card' %}selected{% endif %}>Card</option>
+                <option value="table" {% if view_mode == 'table' %}selected{% endif %}>Tabella</option>
+                <option value="list" {% if view_mode == 'list' %}selected{% endif %}>Lista</option>
+            </select>
+            <button type="submit">Cambia Visualizzazione</button>
+        </form>
+
+        <!-- Form per selezionare e aggiungere i prodotti al carrello -->
+        <form method="POST" action="{{ url_for('store') }}">
+            <!-- Visualizzazione come card -->
+            {% if view_mode == 'card' %}
+                <div class="card-container">
+                    {% for prodotto in prodotti %}
+                        <div class="card">
+                            <h2>{{ prodotto[1] }}</h2>
+                            <p>Marca: {{ prodotto[2] }}</p>
+                            <p>Prezzo: €{{ prodotto[3] }}</p>
+                            <img src="{{ prodotto[4] }}" alt="{{ prodotto[1] }}">
+                            <input type="checkbox" name="prodotti_selezionati" value="{{ prodotto[0] }}"> Seleziona
+                            <br>
+                            <label for="quantita_{{ prodotto[0] }}">Quantità:</label>
+                            <input type="number" id="quantita_{{ prodotto[0] }}" name="quantita_{{ prodotto[0] }}" min="1" value="1" required>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            <!-- Visualizzazione come tabella -->
+            {% elif view_mode == 'table' %}
+                <table>
+                    <tr>
+                        <th>Seleziona</th>
+                        <th>Nome</th>
+                        <th>Marca</th>
+                        <th>Prezzo</th>
+                        <th>Immagine</th>
+                        <th>Quantità</th>
+                    </tr>
+                    {% for prodotto in prodotti %}
+                    <tr>
+                        <td><input type="checkbox" name="prodotti_selezionati" value="{{ prodotto[0] }}"></td>
+                        <td>{{ prodotto[1] }}</td>
+                        <td>{{ prodotto[2] }}</td>
+                        <td>€{{ prodotto[3] }}</td>
+                        <td><img src="{{ prodotto[4] }}" alt="{{ prodotto[1] }}" width="100"></td>
+                        <td>
+                            <input type="number" id="quantita_{{ prodotto[0] }}" name="quantita_{{ prodotto[0] }}" min="1" value="1" required>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            <!-- Visualizzazione come lista -->
+            {% elif view_mode == 'list' %}
+                <ul>
+                    {% for prodotto in prodotti %}
+                        <li>
+                            <input type="checkbox" name="prodotti_selezionati" value="{{ prodotto[0] }}">
+                            <img src="{{ prodotto[4] }}" alt="{{ prodotto[1] }}" width="50">
+                            {{ prodotto[1] }} - {{ prodotto[2] }} - €{{ prodotto[3] }}
+                            <label for="quantita_{{ prodotto[0] }}">Quantità:</label>
+                            <input type="number" id="quantita_{{ prodotto[0] }}" name="quantita_{{ prodotto[0] }}" min="1" value="1" required>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <button type="submit">Aggiungi al Carrello</button>
+        </form>
+
+        <a href="{{ url_for('cart') }}" class="cart-button">Vai al Carrello</a>
+
+    </div>
+
+</body>
+</html>
+

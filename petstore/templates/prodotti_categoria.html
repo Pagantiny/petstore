@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Prodotti Categoria</title>
+</head>
+<body>
+    <h1>Prodotti nella Categoria</h1>
+    <ul>
+        {% for prodotto in prodotti %}
+            <li>{{ prodotto[1] }} - {{ prodotto[2] }} - €{{ prodotto[3] }} - Pezzi: {{ prodotto[6] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/gestore">Torna al Gestore</a>
+</body>
+</html>
