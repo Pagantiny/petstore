@@ -8,3 +8,15 @@ tecnologie usate per la creazione:
   .mySQL
   .pandas
 
+
+  -------------------------------------------------------------------------------------------------------------------
+
+  example website of a pet store made in python
+
+technologies used for creation:
+  .python
+  .flask
+  .matplotlib
+  .mySQL
+  .pandas
+
